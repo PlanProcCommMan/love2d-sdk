@@ -23,7 +23,7 @@ function sdk.update()
       if k == "Delete" then
         sdk.entities[e.EntityID] = nil
       end
-      if k == "Event" then
+      if k == "Event" and e ~= "" then
         sdk.msg(json.decode(e))
       end
     end

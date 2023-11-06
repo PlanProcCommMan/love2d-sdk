@@ -35,7 +35,7 @@ local packetproto = {
     [1]={type="string", name="EntityID"}
   }},
   [4]={type="bool", name="Leave"},
-  [5]={type="string", name="Arbitrary"}.
+  [5]={type="string", name="Arbitrary"},
   [6]={type="string", name="Event"}
 }
 
