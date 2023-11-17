@@ -78,9 +78,9 @@ while true do
       return
     end
   else
-    ok, bts = pcall(base64.decode(res))
+    ok, bts = pcall(base64.decode, res)
     if ok then
-      ok, msg = pcall(luapb.deserialise(bts, packetproto))
+      ok, msg = pcall(luapb.deserialise, bts, packetproto)
       if ok then
         out:push(msg)
       end
