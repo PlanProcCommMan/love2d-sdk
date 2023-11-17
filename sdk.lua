@@ -3,6 +3,7 @@ local json = require "sdk.json"
 local sdk = {}
 
 function sdk.init(gameid, username, password)
+  sdk.creds = {gameid=gameid, username=username, password=password}
   sdk.thread = love.thread.newThread("sdk/thread.lua")
   sdk.out = love.thread.getChannel("out")
   sdk.inp = love.thread.getChannel("in")
@@ -29,7 +30,12 @@ function sdk.update()
     end
   end
   if not sdk.thread:isRunning() then
-    love.event.quit()
+    local msg = {x=0, y=0}
+    if sdk.entities[sdk.uuid] then
+      msg.x, msg.y = sdk.entities[sdk.uuid].X, sdk.entities[sdk.uuid].Y
+    end
+    sdk.init(sdk.creds.gameid, sdk.creds.username, sdk.creds.password)
+    sdk.inp:push(msg)
   end
 end
 

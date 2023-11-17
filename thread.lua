@@ -78,7 +78,13 @@ while true do
       return
     end
   else
-    out:push(luapb.deserialise(base64.decode(res), packetproto))
+    ok, bts = pcall(base64.decode(res))
+    if ok then
+      ok, msg = pcall(luapb.deserialise(bts, packetproto))
+      if ok then
+        out:push(msg)
+      end
+    end
   end
   msg = inp:pop()
   if msg then
