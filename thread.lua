@@ -5,6 +5,10 @@ local gid,un,pw = ...
 local luapb = require("sdk.luapb.luapb")
 local socket = require("socket")
 local base64 = require("sdk.base64")
+local rc4 = require("sdk.rc4")
+
+local rc4in = rc4("guacamole")
+local rc4out = rc4("guacamole")
 
 local out = love.thread.getChannel("out")
 local inp = love.thread.getChannel("in")
@@ -40,7 +44,7 @@ local packetproto = {
 }
 
 s = socket.tcp()
-i, _ = s:connect("planetaryprocessing.io", 42)
+i, _ = s:connect("localhost", 4101)
 if i ~= 1 then
   print("failed connection")
   return
@@ -61,7 +65,7 @@ end
 
 out:push(luapb.deserialise(base64.decode(res), loginproto))
 
-_,err,_ = s:send(base64.encode(luapb.serialise({Move={X=0, Y=0}}, packetproto)).."\n")
+_,err,_ = s:send(base64.encode(rc4out(luapb.serialise({Move={X=0, Y=0}}, packetproto))).."\n")
 if err then
   out:push("")
   print(err)
@@ -80,6 +84,7 @@ while true do
   else
     ok, bts = pcall(base64.decode, res)
     if ok then
+      bts = rc4in(bts)
       ok, msg = pcall(luapb.deserialise, bts, packetproto)
       if ok then
         out:push(msg)
@@ -88,6 +93,6 @@ while true do
   end
   msg = inp:pop()
   if msg then
-    s:send(base64.encode(luapb.serialise(msg, packetproto)).."\n")
+    s:send(base64.encode(rc4out(luapb.serialise(msg, packetproto))).."\n")
   end
 end
