@@ -53,7 +53,7 @@ local packetproto = {
 }
 
 s = socket.tcp()
-i, _ = s:connect("localhost", 4101)
+i, _ = s:connect("planetaryprocessing.io", 42)
 if i ~= 1 then
   print("failed connection")
   return
