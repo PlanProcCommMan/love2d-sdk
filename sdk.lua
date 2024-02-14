@@ -48,7 +48,7 @@ function sdk.message(msg)
   sdk.inp:push({Arbitrary=s})
 end
 
-function sdk.onevent(event)
+function sdk.event(event)
 end
 
 return sdk
