@@ -3,14 +3,14 @@ local json = require "sdk.json"
 local sdk = {}
 
 function sdk.init(gameid, username, password)
-  sdk.creds = {gameid=gameid, username=username, password=password}
   sdk.thread = love.thread.newThread("sdk/thread.lua")
   sdk.out = love.thread.getChannel("out")
   sdk.inp = love.thread.getChannel("in")
   sdk.thread:start(gameid, username, password)
   sdk.entities = {}
-  sdk.inp:push({Move={X=0, Y=0}})
-  sdk.uuid = sdk.out:demand().UUID
+  sdk.inp:push({Move = {X = 0, Y = 0}})
+  local initResult = sdk.out:demand()
+  sdk.uuid = initResult.UUID
 end
 
 function sdk.update()

@@ -8,19 +8,21 @@ local base64 = require("sdk.base64")
 local rc4 = require("sdk.rc4")
 local json = require("sdk.json")
 local https = require("https")
+
+local out = love.thread.getChannel("out")
+local inp = love.thread.getChannel("in")
+
 opts = {data=json.encode({GameID=tonumber(gid), Username=un, Password=pw})}
 code, body, _ = https.request("https://api.planetaryprocessing.io//_api/golang.planetaryprocessing.io/apis/httputils/HTTPUtils/GetKey", opts)
 if code ~= 200 then
   print("failed to authenticate")
+  out:push("")
   return
 end
 key = json.decode(body)
 key = base64.decode(key.Key)
 local rc4in = rc4(key)
 local rc4out = rc4(key)
-
-local out = love.thread.getChannel("out")
-local inp = love.thread.getChannel("in")
 
 local loginproto = {
   [1]={type="string", name="Token"},
@@ -56,19 +58,21 @@ s = socket.tcp()
 i, _ = s:connect("planetaryprocessing.io", 42)
 if i ~= 1 then
   print("failed connection")
+  out:push("")
   return
 end
 
 _,err,_ = s:send(base64.encode(luapb.serialise({Email=un, Password=pw, GameID=tonumber(gid)}, loginproto)).."\n")
 if err then
   print(err)
+  out:push("")
   return
 end
 
 res,err,_ = s:receive("*l")
 if err then
-  out:push("")
   print(err)
+  out:push("")
   return
 end
 
@@ -76,8 +80,8 @@ out:push(luapb.deserialise(base64.decode(res), loginproto))
 
 _,err,_ = s:send(base64.encode(rc4out(luapb.serialise({Move={X=0, Y=0}}, packetproto))).."\n")
 if err then
-  out:push("")
   print(err)
+  out:push("")
   return
 end
 
