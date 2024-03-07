@@ -19,6 +19,7 @@ function sdk.update()
     if not x then break end
     for k,e in pairs(x) do
       if k == "Update" then
+        e.Data = json.decode(e.Data)
         sdk.entities[e.EntityID] = e
       end
       if k == "Delete" then
