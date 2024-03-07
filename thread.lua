@@ -43,7 +43,7 @@ local packetproto = {
     [2]={type="double", name="X"},
     [3]={type="double", name="Y"},
     [4]={type="double", name="Z"},
-    [5]={type="bytes", name="Data"},
+    [5]={type="string", name="Data"},
     [6]={type="string", name="Type"}
   }},
   [3]={type="proto", name="Delete", proto={
@@ -109,7 +109,7 @@ while true do
   msg = inp:pop()
   if msg then
     local d = base64.encode(rc4out(luapb.serialise(msg, packetproto)))
-    print(d)
+    --print(d)
     s:send(d.."\n")
   end
 end
