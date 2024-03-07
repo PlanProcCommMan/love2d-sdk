@@ -19,8 +19,9 @@ if code ~= 200 then
   out:push("")
   return
 end
-key = json.decode(body)
-key = base64.decode(key.Key)
+resp = json.decode(body)
+uuid = resp.UUID
+key = base64.decode(resp.Key)
 local rc4in = rc4(key)
 local rc4out = rc4(key)
 
@@ -62,7 +63,7 @@ if i ~= 1 then
   return
 end
 
-_,err,_ = s:send(base64.encode(luapb.serialise({Email=un, Password=pw, GameID=tonumber(gid)}, loginproto)).."\n")
+_,err,_ = s:send(base64.encode(luapb.serialise({UUID=uuid, GameID=tonumber(gid)}, loginproto)).."\n")
 if err then
   print(err)
   out:push("")
