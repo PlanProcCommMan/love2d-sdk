@@ -10,7 +10,6 @@ function sdk.init(gameid, username, password)
     sdk.kil = love.thread.getChannel("kill")
     sdk.thread:start(gameid, username, password)
     sdk.entities = {}
---    sdk.inp:push({Move = {X = 0, Y = 0}})
     local initResult = sdk.out:demand()
     sdk.uuid = initResult.UUID
 end
@@ -29,6 +28,13 @@ function sdk.update()
                 sdk.event(json.decode(e))
             end
         end
+    end
+    if not sdk.thread:isRunning() and sdk.creds then
+        if sdk.entities[sdk.uuid] then
+            msg.x, msg.y = sdk.entities[sdk.uuid].X, sdk.entities[sdk.uuid].Y
+        end
+        sdk.init(sdk.creds.gameid, sdk.creds.username, sdk.creds.password) 
+        sdk.join()
     end
 end
 
