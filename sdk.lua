@@ -43,7 +43,7 @@ end
 function sdk.quit()
   sdk.creds = nil
   sdk.kil:push({})
-  sdk.uuid = ""
+  sdk.uuid = nil
   sdk.entities = {}
 end
 
