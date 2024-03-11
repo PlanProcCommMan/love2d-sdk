@@ -80,6 +80,8 @@ end
 
 out:push(luapb.deserialise(base64.decode(res), loginproto))
 
+love.timer.sleep(1)
+
 s:settimeout(0.05)
 
 local tmp = ""

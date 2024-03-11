@@ -10,7 +10,7 @@ function sdk.init(gameid, username, password)
     sdk.kil = love.thread.getChannel("kill")
     sdk.thread:start(gameid, username, password)
     sdk.entities = {}
-    sdk.inp:push({Move = {X = 0, Y = 0}})
+--    sdk.inp:push({Move = {X = 0, Y = 0}})
     local initResult = sdk.out:demand()
     sdk.uuid = initResult.UUID
 end
@@ -42,6 +42,10 @@ end
 
 function sdk.join()
   sdk.inp:push({Move={X=0, Y=0}})
+end
+
+function sdk.leave()
+  sdk.inp:push({Leave=true})
 end
 
 function sdk.quit()
