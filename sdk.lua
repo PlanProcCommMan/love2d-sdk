@@ -30,14 +30,6 @@ function sdk.update()
             end
         end
     end
-    if not sdk.thread:isRunning() then
-        local msg = {x = 0, y = 0}
-        if sdk.entities[sdk.uuid] then
-            msg.x, msg.y = sdk.entities[sdk.uuid].X, sdk.entities[sdk.uuid].Y
-        end
-        sdk.init(sdk.creds.gameid, sdk.creds.username, sdk.creds.password)
-        sdk.inp:push(msg)
-    end
 end
 
 function sdk.join()
@@ -51,6 +43,8 @@ end
 function sdk.quit()
   sdk.creds = nil
   sdk.kil:push({})
+  sdk.uuid = ""
+  sdk.entities = {}
 end
 
 function sdk.move(dx, dy) sdk.inp:push({Move = {X = dx, Y = dy}}) end
@@ -61,15 +55,5 @@ function sdk.message(msg)
 end
 
 function sdk.event(event) end
-
-function sdk.destroy()
-    if sdk.thread then
-        sdk.thread:release()
-        sdk.thread = nil
-    end
-    sdk.uuid = nil
-    sdk.creds = {}
-    sdk.entities = {}
-end
 
 return sdk
