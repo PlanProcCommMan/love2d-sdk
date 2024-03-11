@@ -11,6 +11,7 @@ local https = require("https")
 
 local out = love.thread.getChannel("out")
 local inp = love.thread.getChannel("in")
+local kill = love.thread.getChannel("kill")
 
 opts = {data=json.encode({GameID=tonumber(gid), Username=un, Password=pw})}
 code, body, _ = https.request("https://api.planetaryprocessing.io//_api/golang.planetaryprocessing.io/apis/httputils/HTTPUtils/GetKey", opts)
@@ -79,13 +80,6 @@ end
 
 out:push(luapb.deserialise(base64.decode(res), loginproto))
 
-_,err,_ = s:send(base64.encode(rc4out(luapb.serialise({Move={X=0, Y=0}}, packetproto))).."\n")
-if err then
-  print(err)
-  out:push("")
-  return
-end
-
 s:settimeout(0.05)
 
 local tmp = ""
@@ -112,5 +106,9 @@ while true do
     local d = base64.encode(rc4out(luapb.serialise(msg, packetproto)))
     --print(d)
     s:send(d.."\n")
+  end
+  msg = kill:pop()
+  if msg then
+    s:close()
   end
 end

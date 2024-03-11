@@ -7,6 +7,7 @@ function sdk.init(gameid, username, password)
     sdk.thread = love.thread.newThread("sdk/thread.lua")
     sdk.out = love.thread.getChannel("out")
     sdk.inp = love.thread.getChannel("in")
+    sdk.kil = love.thread.getChannel("kill")
     sdk.thread:start(gameid, username, password)
     sdk.entities = {}
     sdk.inp:push({Move = {X = 0, Y = 0}})
@@ -37,6 +38,14 @@ function sdk.update()
         sdk.init(sdk.creds.gameid, sdk.creds.username, sdk.creds.password)
         sdk.inp:push(msg)
     end
+end
+
+function sdk.join()
+  sdk.inp:push({Move={X=0, Y=0}})
+end
+
+function sdk.quit()
+  sdk.kil:push({})
 end
 
 function sdk.move(dx, dy) sdk.inp:push({Move = {X = dx, Y = dy}}) end
