@@ -45,6 +45,7 @@ function sdk.join()
 end
 
 function sdk.quit()
+  sdk.creds = nil
   sdk.kil:push({})
 end
 
