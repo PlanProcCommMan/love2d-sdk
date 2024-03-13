@@ -53,13 +53,9 @@ function sdk.quit()
   sdk.entities = {}
 end
 
-function sdk.move(dx, dy) sdk.inp:push({Move = {X = dx, Y = dy}}) end
-
 function sdk.message(msg)
     local s = json.encode(msg)
     sdk.inp:push({Arbitrary = s})
 end
-
-function sdk.event(event) end
 
 return sdk
