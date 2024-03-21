@@ -30,9 +30,6 @@ function sdk.update()
         end
     end
     if not sdk.thread:isRunning() and sdk.creds then
-        if sdk.entities[sdk.uuid] then
-            msg.x, msg.y = sdk.entities[sdk.uuid].X, sdk.entities[sdk.uuid].Y
-        end
         sdk.init(sdk.creds.gameid, sdk.creds.username, sdk.creds.password) 
         sdk.join()
     end
