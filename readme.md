@@ -1,6 +1,15 @@
 # Introduction
 
-The SwarmPlay Love2D SDK can be installed by cloning the latest version from our [GitHub](https://github.com/planetary-processing/). You can then import the sdk with `local sdk = require(“sdk.sdk”)`.
+The SwarmPlay Love2D SDK can be installed by cloning the latest version from our [GitHub](https://github.com/planetary-processing/) into your a folder called `sdk` within your Love2D game directory.
+
+```sh
+git clone https://github.com/planetary-processing/love2d-sdk sdk
+```
+
+You can then import the sdk like so:
+```lua
+local sdk = require(“sdk.sdk”)
+```
 
 The SDK object returned will have functions:
 
