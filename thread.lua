@@ -14,7 +14,7 @@ local inp = love.thread.getChannel("in")
 local kill = love.thread.getChannel("kill")
 
 opts = {data=json.encode({GameID=tonumber(gid), Username=un, Password=pw})}
-code, body, _ = https.request("https://api.planetaryprocessing.io//_api/golang.planetaryprocessing.io/apis/httputils/HTTPUtils/GetKey", opts)
+code, body, _ = https.request("https://api.planetaryprocessing.io/_api/golang.planetaryprocessing.io/apis/httputils/HTTPUtils/GetKey", opts)
 if code ~= 200 then
   print("failed to authenticate")
   out:push("")
