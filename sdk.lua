@@ -10,6 +10,7 @@ function sdk.init(gameid, username, password)
     sdk.kil = love.thread.getChannel("kill")
     sdk.thread:start(gameid, username, password)
     sdk.entities = {}
+    sdk.chunks = {}
     local initResult = sdk.out:demand()
     sdk.uuid = initResult.UUID
 end
@@ -26,6 +27,19 @@ function sdk.update()
             if k == "Delete" then sdk.entities[e.EntityID] = nil end
             if k == "Event" and e ~= "" then
                 sdk.event(json.decode(e))
+            end
+            if k == "Chunk" then
+               e.Data = json.decode(e.Data)
+               sdk.chunks[e.ID] = e
+               local remove = {}
+               for k,v in pairs(sdk.chunks) do
+                   if math.abs(v.X-e.X) > 3 or math.abs(v.Y-e.Y) > 3 then
+                       remove[k] = true
+                   end
+               end
+               for k,_ in pairs(remove) do
+                   sdk.chunks[k] = nil
+               end
             end
         end
     end

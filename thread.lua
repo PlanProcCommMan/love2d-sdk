@@ -52,7 +52,13 @@ local packetproto = {
   }},
   [4]={type="bool", name="Leave"},
   [5]={type="string", name="Arbitrary"},
-  [6]={type="string", name="Event"}
+  [6]={type="string", name="Event"},
+  [7]={type="proto", name="Chunk", proto={
+    [1]={type="uint64", name="ID"},
+    [3]={type="int64", name="X"},
+    [4]={type="int64", name="Y"},
+    [2]={type="string", name="Data"}
+  }}
 }
 
 s = socket.tcp()
