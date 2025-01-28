@@ -7,14 +7,13 @@ local socket = require("socket")
 local base64 = require("sdk.base64")
 local rc4 = require("sdk.rc4")
 local json = require("sdk.json")
-local https = require("https")
+local https = require("socket.http")
 
 local out = love.thread.getChannel("out")
 local inp = love.thread.getChannel("in")
 local kill = love.thread.getChannel("kill")
 
-opts = {data=json.encode({GameID=tonumber(gid), Username=un, Password=pw})}
-code, body, _ = https.request("https://api.planetaryprocessing.io/_api/golang.planetaryprocessing.io/apis/httputils/HTTPUtils/GetKey", opts)
+body,code,_ = https.request("http://api.planetaryprocessing.io/_api/golang.planetaryprocessing.io/apis/httputils/HTTPUtils/GetKey?GameID="..tostring(gid))
 if code ~= 200 then
   print("failed to authenticate")
   out:push("")
