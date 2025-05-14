@@ -11,6 +11,7 @@ function sdk.init(gameid, username, password)
     sdk.thread:start(gameid, username, password)
     sdk.entities = {}
     sdk.chunks = {}
+    sdk.server_to_client = nil
     local initResult = sdk.out:demand()
     sdk.uuid = initResult.UUID
 end
@@ -26,7 +27,9 @@ function sdk.update()
             end
             if k == "Delete" then sdk.entities[e.EntityID] = nil end
             if k == "Event" and e ~= "" then
-                sdk.event(json.decode(e))
+                if sdk.server_to_client ~= nil then
+                    sdk.server_to_client(json.decode(e))
+                end
             end
             if k == "Chunk" then
                e.Data = json.decode(e.Data)
